@@ -1,6 +1,17 @@
 ROSTemplateFormatVersion: '2015-09-01'
 # 定义参数
 Parameters:
+  Parameters:
+    Type: Json
+    AssociationProperty: Json
+    Default:
+      AdminPassword:
+        NoEcho: true
+        Type: String
+        Label:
+          en: Admin Password
+          zh-cn: 管理员密码
+        AssociationProperty: ALIYUN::ECS::Instance::Password
   ReleaseName:
     Type: String
     Default: helm
