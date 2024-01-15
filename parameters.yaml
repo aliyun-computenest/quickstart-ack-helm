@@ -5,13 +5,11 @@ Parameters:
     Type: Json
     AssociationProperty: Json
     Default:
-      AdminPassword:
-        NoEcho: true
-        Type: String
-        Label:
-          en: Admin Password
-          zh-cn: 管理员密码
-        AssociationProperty: ALIYUN::ECS::Instance::Password
+    - Name: AdminPassword
+      NoEcho: true
+      Type: String
+      Label: 管理员密码
+      AssociationProperty: ALIYUN::ECS::Instance::Password
   ReleaseName:
     Type: String
     Default: helm
@@ -60,12 +58,6 @@ Parameters:
         DisplayName: Endpoint
         JsonPath: $.status.loadBalancer.ingress[0].ip
         Expression: https://${OutputValue}:8080
-  Protocol:
-    Type: String
-    Default: http
-    AllowedValues:
-      - http
-      - https
 Metadata:
   ALIYUN::ROS::Interface:
     # 定义资源分组，创建服务实例时，同一分组的参数分布在一起

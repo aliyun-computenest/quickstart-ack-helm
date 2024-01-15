@@ -1,6 +1,8 @@
 ReleaseName: harbor
+HelmArtifactId: artifact-xxx
+HelmArtifactVersion: draft
 Parameters:
-  AdminPassword:
+  - Name: AdminPassword
     NoEcho: true
     Type: String
     Label: 管理员密码
@@ -23,5 +25,3 @@ Outputs:
     DisplayName: Endpoint
     JsonPath: $.status.loadBalancer.ingress[0].ip
     Expression: https://${OutputValue}:8080
-HelmArtifactId: artifact-xxx
-HelmArtifactVersion: draft
