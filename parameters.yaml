@@ -1,0 +1,77 @@
+ROSTemplateFormatVersion: '2015-09-01'
+# 定义参数
+Parameters:
+  ReleaseName:
+    Type: String
+    Default: helm
+  HelmArtifactId:
+    Type: String
+    Label:
+      en: helm artifact
+      zh-cn: helm部署物
+    AssociationProperty: ALIYUN::ComputeNestSupplier::Artifact
+    AssociationPropertyMetadata:
+      Filters:
+        - Name: ArtifactType
+          Values:
+            - HelmChart
+  HelmArtifactVersion:
+    Type: String
+    Label:
+      en: helm artifact
+      zh-cn: helm部署物版本
+    AssociationProperty: ALIYUN::ComputeNestSupplier::ArtifactVersion
+    AssociationPropertyMetadata:
+      ArtifactId: ${HelmArtifactId}
+  Values:
+    Type: String
+    AssociationProperty: Json
+    Default:
+      service:
+        type: LoadBalancer
+      postgresql:
+        enabled: true
+        adminPassword:
+          Ref: AdminPassword
+        primary:
+          persistence:
+            enabled: true
+            storageClass: alicloud-disk-essd
+            size: 40Gi
+  WaitUntils:
+    Type: Json
+    AssociationProperty: Json
+    Default:
+      - Kind: Service
+        Name: harbor-server
+        JsonPath: $.status.loadBalancer.ingress[0].ip
+        Operator: NotEmpty
+        FirstMatch: true
+        Timeout: 300
+  Outputs:
+    Type: Json
+    AssociationProperty: Json
+    Default:
+      Kind: Service
+      Name: harbor-server
+      JsonPath: $.status.loadBalancer.ingress[0].ip
+  Protocol:
+    Type: String
+    Default: http
+    AllowedValues:
+      - http
+      - https
+Metadata:
+  ALIYUN::ROS::Interface:
+    # 定义资源分组，创建服务实例时，同一分组的参数分布在一起
+    ParameterGroups:
+      - Parameters:
+          - HelmArtifact
+          - ReleaseName
+          - Values
+          - WaitUntils
+          - Outputs
+          - Protocol
+        Label:
+          en: Deployment Configuration
+          zh-cn: 部署配置
