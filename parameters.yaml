@@ -20,8 +20,9 @@ Parameters:
     Label:
       en: helm artifact
       zh-cn: helm部署物
-    AssociationProperty: ALIYUN::ComputeNestSupplier::Artifact
+    AssociationProperty: ALIYUN::ComputeNest::Artifact::ArtifactId
     AssociationPropertyMetadata:
+      IsSupplier: true
       Filters:
         - Name: ArtifactType
           Values:
@@ -31,8 +32,9 @@ Parameters:
     Label:
       en: helm artifact
       zh-cn: helm部署物版本
-    AssociationProperty: ALIYUN::ComputeNestSupplier::ArtifactVersion
+    AssociationProperty: ALIYUN::ComputeNest::Artifact::ArtifactIdVersion
     AssociationPropertyMetadata:
+      IsSupplier: true
       ArtifactId: ${HelmArtifactId}
   Values:
     Type: String
@@ -49,23 +51,15 @@ Parameters:
             enabled: true
             storageClass: alicloud-disk-essd
             size: 40Gi
-  WaitUntils:
+  Outputs:
     Type: Json
     AssociationProperty: Json
     Default:
       - Kind: Service
         Name: harbor-server
+        DisplayName: Endpoint
         JsonPath: $.status.loadBalancer.ingress[0].ip
-        Operator: NotEmpty
-        FirstMatch: true
-        Timeout: 300
-  Outputs:
-    Type: Json
-    AssociationProperty: Json
-    Default:
-      Kind: Service
-      Name: harbor-server
-      JsonPath: $.status.loadBalancer.ingress[0].ip
+        Expression: https://${OutputValue}:8080
   Protocol:
     Type: String
     Default: http
@@ -77,12 +71,16 @@ Metadata:
     # 定义资源分组，创建服务实例时，同一分组的参数分布在一起
     ParameterGroups:
       - Parameters:
-          - HelmArtifact
+          - HelmArtifactId
+          - HelmArtifactVersion
           - ReleaseName
+          - Parameters
           - Values
-          - WaitUntils
-          - Outputs
-          - Protocol
         Label:
           en: Deployment Configuration
           zh-cn: 部署配置
+      - Parameters:
+          - Outputs
+        Label:
+          en: Deployment Configuration
+          zh-cn: 输出配置

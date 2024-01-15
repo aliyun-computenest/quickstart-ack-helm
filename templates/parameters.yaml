@@ -1,13 +1,11 @@
-releaseName: harbor
-parameters:
+ReleaseName: harbor
+Parameters:
   AdminPassword:
     NoEcho: true
     Type: String
-    Label:
-      en: Admin Password
-      zh-cn: 管理员密码
+    Label: 管理员密码
     AssociationProperty: ALIYUN::ECS::Instance::Password
-values:
+Values:
   service:
     type: LoadBalancer
   postgresql:
@@ -19,15 +17,11 @@ values:
         enabled: true
         storageClass: alicloud-disk-essd
         size: 40Gi
-waitUntils:
+Outputs:
   - Kind: Service
     Name: harbor-server
+    DisplayName: Endpoint
     JsonPath: $.status.loadBalancer.ingress[0].ip
-    Operator: NotEmpty
-    FirstMatch: true
-    Timeout: 300
-outputs:
-  Kind: Service
-  Name: harbor-server
-  JsonPath: $.status.loadBalancer.ingress[0].ip
-protocol: https
+    Expression: https://${OutputValue}:8080
+HelmArtifactId: artifact-xxx
+HelmArtifactVersion: draft

@@ -295,13 +295,7 @@ Parameters:
             - ${CreateAck}
             - true
     Default: 172.16.0.0/16
-  AdminPassword: 
-    NoEcho: True
-    Type: String
-    Label: 
-      en: Admin Password
-      zh-cn: 管理员密码
-    AssociationProperty: ALIYUN::ECS::Instance::Password
+  
 Conditions:
   CreateAck:
     Fn::Equals:
@@ -442,54 +436,41 @@ Resources:
               - ManagedKubernetesCluster
               - ClusterId
           - Ref: ClusterId
-      
       HelmChartUrl: '{{ computenest::helmchart::chartUrl }}'
       DockerConfigJson: '{{ computenest::helm::dockerconfigjson }}'
-      
-      ChartValues: {'service': {'type': 'LoadBalancer'}, 'postgresql': {'enabled': True, 'adminPassword': {'Ref': 'AdminPassword'}, 'primary': {'persistence': {'enabled': True, 'storageClass': 'alicloud-disk-essd', 'size': '40Gi'}}}}
+      ChartValues: 
+        service: 
+          type: LoadBalancer
+        postgresql: 
+          enabled: True
+          adminPassword: 
+            Ref: AdminPassword
+          primary: 
+            persistence: 
+              enabled: True
+              storageClass: alicloud-disk-essd
+              size: 40Gi
       Namespace:
         Ref: ALIYUN::StackName
       ReleaseName: harbor
-      WaitUntil: 
+      WaitUntil:
         - Kind: Service
           Name: harbor-server
           JsonPath: $.status.loadBalancer.ingress[0].ip
           Operator: NotEmpty
-          FirstMatch: True
+          FistMatch: true
           Timeout: 300
-  # 获取service信息，输出到output中
-  ClusterApplicationResources:
-    Type: DATASOURCE::CS::ClusterApplicationResources
-    DependsOn:
-      - ComputenestHelmApplication
-    Properties:
-      ClusterId:
-        Fn::If:
-          - CreateAck
-          - Fn::GetAtt:
-              - ManagedKubernetesCluster
-              - ClusterId
-          - Ref: ClusterId
-      Namespace:
-        Ref: ALIYUN::StackName
-      FirstMatch: true
-      Kind: Service
-      Name: harbor-server
-      JsonPath: $.status.loadBalancer.ingress[0].ip
 Outputs:
-  # 将公网ip做为http返回的地址显示在控制台
   Endpoint:
-    Description:
-      zh-cn: 访问地址
-      en: Visit Endpoint
     Value:
-  # 将公网ip做为http返回的地址显示在控制台
       Fn::Sub:
-        - "https://${ServerAddress}"
-        - ServerAddress:
-            Fn::GetAtt:
-              - ClusterApplicationResources
-              - Response
+        - https://${OutputValue}:8080
+        - OutputValue:
+            Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - ComputenestHelmApplication
+                - Outputs
 Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:
@@ -526,9 +507,7 @@ Metadata:
           en: Basic Configuration
           zh-cn: 基础配置
       - Parameters:
-        
          - AdminPassword
-        
         Label:
           en: Software Configuration
           zh-cn: 软件配置

@@ -6,9 +6,7 @@ Service:
       Prefix: helm
     SupplierDeployMetadata:
       HelmChartArtifactRelation:
-        <% raw %>
-        '{{ computenest::helmchart::chartUrl }}':
-        <% endraw %>
+        {% raw %}'{{ computenest::helmchart::chartUrl }}': {% endraw %}
           ArtifactId: {{ HelmArtifactId }}
           ArtifactVersion: {{ HelmArtifactVersion }}
     TemplateConfigs:
