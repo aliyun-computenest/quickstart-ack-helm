@@ -22,6 +22,6 @@ Values:
 Outputs:
   - Kind: Service
     Name: harbor-server
-    DisplayName: Endpoint
+    Label: Endpoint
     JsonPath: $.status.loadBalancer.ingress[0].ip
     Expression: https://${OutputValue}:8080

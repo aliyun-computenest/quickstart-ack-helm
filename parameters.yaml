@@ -21,10 +21,7 @@ Parameters:
     AssociationProperty: ALIYUN::ComputeNest::Artifact::ArtifactId
     AssociationPropertyMetadata:
       IsSupplier: true
-      Filters:
-        - Name: ArtifactType
-          Values:
-            - HelmChart
+      ArtifactType: HelmChart
   HelmArtifactVersion:
     Type: String
     Label:
@@ -55,7 +52,7 @@ Parameters:
     Default:
       - Kind: Service
         Name: harbor-server
-        DisplayName: Endpoint
+        Label: Endpoint
         JsonPath: $.status.loadBalancer.ingress[0].ip
         Expression: https://${OutputValue}:8080
 Metadata:
