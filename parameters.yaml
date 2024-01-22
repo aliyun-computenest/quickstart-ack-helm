@@ -3,13 +3,38 @@ ROSTemplateFormatVersion: '2015-09-01'
 Parameters:
   Parameters:
     Type: Json
-    AssociationProperty: Json
-    Default:
-    - Name: AdminPassword
-      NoEcho: true
-      Type: String
-      Label: 管理员密码
-      AssociationProperty: ALIYUN::ECS::Instance::Password
+    AssociationProperty: List[Parameters]
+    AssociationPropertyMetadata:
+      Parameters:
+        Name:
+          Type: String
+        Label:
+          Type: String
+        Type:
+          Type: String
+          AllowedValues:
+            - Integer
+            - String
+            - Boolean
+            - Json
+        AllowedValues:
+          Type: Json
+          AssociationProperty: List
+          AssociationPropertyMetadata:
+            Multiple: true
+          Default: Null
+          Required: false
+        NoEcho:
+          Type: Boolean
+          Default: false
+          AllowedValues:
+            - true
+            - false
+        AssociationProperty:
+          Type: String
+          Default: Null
+          Required: false
+          AssociationProperty: AssociationProperty
   ReleaseName:
     Type: String
     Default: helm
@@ -48,7 +73,25 @@ Parameters:
             size: 40Gi
   Outputs:
     Type: Json
-    AssociationProperty: Json
+    AssociationProperty: List[Parameters]
+    AssociationPropertyMetadata:
+      Parameters:
+        Kind:
+          Type: String
+          AllowedValues:
+            - Service
+            - Deployment
+            - StatefulSet
+            - ConfigMap
+            - Ingress
+        Name:
+          Type: String
+        Label:
+          Type: String
+        JsonPath:
+          Type: String
+        Expression:
+          Type: String
     Default:
       - Kind: Service
         Name: harbor-server
@@ -60,8 +103,10 @@ Metadata:
     # 定义资源分组，创建服务实例时，同一分组的参数分布在一起
     ParameterGroups:
       - Parameters:
-          - HelmArtifactId
-          - HelmArtifactVersion
+          - Label: Helm部署物
+            Items:
+              - HelmArtifactId
+              - HelmArtifactVersion
           - ReleaseName
           - Parameters
           - Values
