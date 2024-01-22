@@ -86,7 +86,7 @@ Parameters:
             - Ingress
         Name:
           Type: String
-        Label:
+        DisplayName:
           Type: String
         JsonPath:
           Type: String
@@ -95,7 +95,7 @@ Parameters:
     Default:
       - Kind: Service
         Name: harbor-server
-        Label: Endpoint
+        DisplayName: Endpoint
         JsonPath: $.status.loadBalancer.ingress[0].ip
         Expression: https://${OutputValue}:8080
 Metadata:
