@@ -35,12 +35,12 @@ Parameters:
           Default: Null
           Required: false
           AssociationProperty: AssociationProperty
-      Default:
-        - Name: AdminPassword
-          NoEcho: true
-          Type: String
-          Label: 管理员密码
-          AssociationProperty: ALIYUN::ECS::Instance::Password
+    Default:
+      - Name: AdminPassword
+        NoEcho: true
+        Type: String
+        Label: 管理员密码
+        AssociationProperty: ALIYUN::ECS::Instance::Password
   ReleaseName:
     Type: String
     Default: helm
