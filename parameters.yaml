@@ -88,10 +88,12 @@ Parameters:
       ArtifactId: ${HelmArtifactId}
   Values:
     Label:
-      en: Helm values file content
-      zh-cn: Helm values文件内容
+      en: Helm values.yaml file content
+      zh-cn: Helm values.yaml文件内容
     Type: String
-    AssociationProperty: Json
+    AssociationProperty: Code
+    AssociationPropertyMetadata:
+      Language: yaml
     Default: |
       service:
         type: LoadBalancer
@@ -108,13 +110,15 @@ Parameters:
     Label:
       en: Service outputs
       zh-cn: 服务输出
-    Description:
-      en: Service outputs. DisplayName is the output key user will see, Expression can reference ${OutputValue}
-      zh-cn: 服务输出。DisplayName是用户见到的输出项名称，Express可以引用${OutputValue}
     Type: Json
     AssociationProperty: List[Parameters]
     AssociationPropertyMetadata:
       Parameters:
+        DisplayName:
+          Label:
+            en: Name of output
+            zh-cn: 输出名
+          Type: String
         Kind:
           Label:
             en: Kind of K8S resource
@@ -131,12 +135,6 @@ Parameters:
             en: Name of K8S resource
             zh-cn: K8S资源名
           Type: String
-        DisplayName:
-        Name:
-          Label:
-            en: Name of service output
-            zh-cn: 服务输出名
-          Type: String
         JsonPath:
           Label:
             en: JsonPath of K8S resource configuration
@@ -145,7 +143,7 @@ Parameters:
         Expression:
           Label:
             en: Expression for output value
-            zh-cn: 输出值表达式(${OutputValue}引用通过JsonPath获取的值)
+            zh-cn: 输出值表达式,${OutputValue}指代通过JsonPath获取的值
           Type: String
     Default:
       - Kind: Service
