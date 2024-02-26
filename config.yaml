@@ -4,9 +4,9 @@ Service:
   DeployMetadata:
     SupplierDeployMetadata:
       HelmChartArtifactRelation:
-        {% raw %}'{{computenest::helmchart::chartUrl}}': {% endraw %}
-          ArtifactId: {{ HelmArtifactId }}
-          ArtifactVersion: {{ HelmArtifactVersion }}
+        '{{computenest::helmchart::chartUrl}}': 
+          ArtifactId: artifact-xxx
+          ArtifactVersion: draft
     TemplateConfigs:
       - Name: ack
         Url: 'templates/template.yaml'
