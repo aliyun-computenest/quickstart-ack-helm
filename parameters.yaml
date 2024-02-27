@@ -95,17 +95,18 @@ Parameters:
     AssociationPropertyMetadata:
       Language: yaml
     Default: |
-      service:
-        type: LoadBalancer
-      postgresql:
-        enabled: true
-        adminPassword:
-          Ref: AdminPassword
+      mariadb:
         primary:
           persistence:
             enabled: true
             storageClass: alicloud-disk-essd
-            size: 40Gi
+            size: 100Gi
+      persistence:
+        enabled: false
+      wordpressUsername: admin
+      wordpressPassword:
+        # 通过Ref: Parameter来引用参数值
+        Ref: WordpressPassword
   Outputs:
     Label:
       en: Service outputs
@@ -147,10 +148,10 @@ Parameters:
           Type: String
     Default:
       - Kind: Service
-        Name: harbor-server
+        Name: wordpress
         DisplayName: Endpoint
         JsonPath: $.status.loadBalancer.ingress[0].ip
-        Expression: https://${OutputValue}:8080
+        Expression: http://${OutputValue}
 Metadata:
   ALIYUN::ROS::Interface:
     # 定义资源分组，创建服务实例时，同一分组的参数分布在一起
