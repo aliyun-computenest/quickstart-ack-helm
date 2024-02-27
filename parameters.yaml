@@ -67,7 +67,7 @@ Parameters:
       en: Helm release name
       zh-cn: Helm release名称
     Type: String
-    Default: helm
+    Default: wordpress
   HelmArtifactId:
     Type: String
     Label:
