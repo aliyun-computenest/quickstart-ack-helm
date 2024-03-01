@@ -109,7 +109,7 @@ Parameters:
       wordpressUsername: admin
       wordpressPassword:
         # 通过Ref: Parameter来引用参数值
-        Ref: WordpressPassword
+        Ref: AdminPassword
   Outputs:
     Label:
       en: Service outputs
