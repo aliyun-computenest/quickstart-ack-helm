@@ -1,13 +1,13 @@
-# 服务模版说明文档
+# 服务模板说明文档
 
 ## 服务模板说明
 
-本文介绍基于Helm部署应用到容器服务ACK集群的服务模板，本示例对应的[git地址](https://github.com/aliyun-computenest/quickstart-ack-helm)
+本文介绍基于Helm部署应用到容器服务ACK集群的服务模板，本示例对应的Git仓库地址：[quickstart-ack-helm](https://github.com/aliyun-computenest/quickstart-ack-helm)
 
-本示例会自动地构建计算巢服务，具体的服务构建流程为
-1. 服务商提前按需创建好HelmChart部署物，参考[官网文档](https://help.aliyun.com/zh/compute-nest/create-a-deployment-object)
-2. 选择此服务模板创建计算巢服务，关联HelmChart部署物，定制values.yaml、服务入参和输出
-3. 提交后自动创建服务，创建过程大约需要2分钟，创建成功后服务变成待预发布状态
+本示例会自动地构建计算巢服务，具体的服务构建流程为：
+1. 服务商提前按需创建好HelmChart部署物，参考[官网文档](https://help.aliyun.com/zh/compute-nest/create-a-deployment-object)。
+2. 选择此服务模板创建计算巢服务，关联HelmChart部署物，定制values.yaml、服务入参和输出。
+3. 提交后自动创建服务，创建过程大约需要2分钟，创建成功后服务变成待预发布状态。
 
 ## 服务部署架构
 此服务模板构建出的服务的部署架构为ACK集群部署，将helm chart文件部署到ACK集群中。应用的网络配置由服务商在helm chart文件中配置。
@@ -27,47 +27,47 @@
 
 ## RAM账号所需权限
 
-此服务模板构建出的服务需要对ACK、VPC等资源进行访问和创建操作，若使用RAM用户创建服务实例，需要在创建服务实例前，对使用的RAM用户的账号添加相应资源的权限。添加RAM权限的详细操作，请参见[为RAM用户授权](https://help.aliyun.com/document_detail/121945.html)。所需权限如下表所示。
+此服务模板构建出的服务需要对ACK、VPC等资源进行访问和创建操作，若使用RAM用户创建服务实例，需要在创建服务实例前，对使用的RAM用户的账号添加相应资源的权限。添加RAM权限的详细操作，请参见[为RAM用户授权](https://help.aliyun.com/document_detail/121945.html)。所需权限如下表所示：
 
-| 权限策略名称                          | 备注                     |
-|---------------------------------|------------------------|
-| AliyunVPCFullAccess             | 管理专有网络（VPC）的权限         |
-| AliyunROSFullAccess             | 管理资源编排服务（ROS）的权限       |
-| AliyunComputeNestUserFullAccess | 管理计算巢服务（ComputeNest）的用户侧权限 |
-| AliyunComputeNestSupplierFullAccess | 管理计算巢服务（ComputeNest）的服务商侧权限 ｜
-| ACK集群相关的权限 | 请按照官网文档进行配置：[ACK集群相关的权限](https://help.aliyun.com/zh/ack/ack-managed-and-ack-dedicated/user-guide/authorization-overview)|
+| 权限策略名称                              | 备注                                                                                                                       |
+|-------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| AliyunVPCFullAccess                 | 管理专有网络（VPC）的权限                                                                                                           |
+| AliyunROSFullAccess                 | 管理资源编排服务（ROS）的权限                                                                                                         |
+| AliyunComputeNestUserFullAccess     | 管理计算巢服务（ComputeNest）的用户侧权限                                                                                               |
+| AliyunComputeNestSupplierFullAccess | 管理计算巢服务（ComputeNest）的服务商侧权限 ｜                                                                                            |
+| ACK集群相关的权限                          | 请按照官网文档进行配置：[ACK集群相关的权限](https://help.aliyun.com/zh/ack/ack-managed-and-ack-dedicated/user-guide/authorization-overview) |
 
 
 ### 自定义服务配置
 本服务模板支持服务商自定义服务配置。在通用场景的基础上对软件的参数和服务的输出进行配置。 
 在服务创建完成后，服务商可以进行编辑定制。
 
-本服务模板支持服务商指定以下信息
+本服务模板支持服务商指定以下信息：
 
-|配置组| 配置项                          | 说明                     |
-|---------|---------------------------------|------------------------|
-|服务信息| 服务图标             |服务图标        |
-|服务信息| 服务名称             |服务名称        |
-|服务信息| 服务简介             |服务简介        |
-|服务信息| 版本描述             | 初始版本的版本描述       |
-|软件配置| HelmChart部署物             |HelmChart部署物和部署物版本|
-|软件配置| Helm release名称             |Helm release名称|
-|软件配置| 自定义服务参数             |服务商自定义的入参，用户在创建服务实例时可见。可以在values.yaml中引用入参         |
-|软件配置| Helm values.yaml文件内容             | Helm values.yaml文件内容，覆盖helm chart中的默认值       |
-|输出配置| 服务输出 | 服务的输出配置，服务实例部署成功后用户可以在服务实例详情中看到输出信息 |
+|配置组| 配置项                          | 说明                                          |
+|---------|---------------------------------|---------------------------------------------|
+|服务信息| 服务图标             | 服务图标。                                       |
+|服务信息| 服务名称             | 服务名称。                                       |
+|服务信息| 服务简介             | 服务简介。                                       |
+|服务信息| 版本描述             | 初始版本的版本描述。                                  |
+|软件配置| HelmChart部署物             | HelmChart部署物和部署物版本。                         |
+|软件配置| Helm release名称             | Helm release名称。                             |
+|软件配置| 自定义服务参数             | 服务商自定义的入参，用户在创建服务实例时可见。可以在values.yaml中引用入参。 |
+|软件配置| Helm values.yaml文件内容             | Helm values.yaml文件内容，覆盖helm chart中的默认值。     |
+|输出配置| 服务输出 | 服务的输出配置，服务实例部署成功后用户可以在服务实例详情中看到输出信息。        |
 
 
 
 ## 服务构建流程
-1. 填写服务的基本信息 
+1. 填写服务的基本信息。
 
 <img src="1.png" width="600" height="380" align="bottom"/>
 
-2. 填写部署配置
+2. 填写部署配置。
 
 <img src="2.png" width="1000" height="600" align="bottom"/>
 
-3. 填写服务输出配置
+3. 填写服务输出配置。
 
 <img src="3.png" width="1000" height="180" align="bottom"/>
 
