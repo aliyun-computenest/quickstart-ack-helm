@@ -9,12 +9,12 @@ Service:
           ArtifactVersion: draft
     TemplateConfigs:
       - Name: ack
-        Url: 'templates/template.yaml'
+        Url: 'ros_templates/template.yaml'
         AllowedRegions: []
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
-    Image: 'icons/service_logo.png'
+    Image: 'resources/icons/service_logo.png'
     Name: Helm私有化部署
   ShareType: Public
   ApprovalType: Manual

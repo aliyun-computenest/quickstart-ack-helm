@@ -1,4 +1,4 @@
 all:
-	pip install computenest-cli
-	computenest-cli generate --file_path=config.yaml.j2  --output_path=config.yaml --parameter_path=templates/parameters.yaml
-	computenest-cli generate --file_path=common/templates/helm-deploy.yaml.j2  --output_path=templates/template.yaml --parameter_path=templates/parameters.yaml
+	pip install computenest-cli==1.2.8.1
+	computenest-cli generate --file_path=code_generation/config.yaml.j2 --parameter_path=code_generation/variables.yaml --output_path=config.yaml
+	computenest-cli generate --file_path=code_generation/ros_templates/template.yaml.j2 --parameter_path=code_generation/variables.yaml --output_path=ros_templates/template.yaml

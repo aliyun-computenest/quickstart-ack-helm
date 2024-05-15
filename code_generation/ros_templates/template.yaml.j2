@@ -295,15 +295,37 @@ Parameters:
             - ${CreateAck}
             - true
     Default: 172.16.0.0/16
-  AdminPassword:
-    Type: String
-    AssociationProperty: ALIYUN::ECS::Instance::Password
-
-    Label: 管理员密码
-
-    NoEcho: True
-
-
+{%- for item in Parameters %}
+  {{ item.Name }}:
+    Type: {{ item.Type }}
+{%- if item.AssociationProperty %}
+    AssociationProperty: {{item.AssociationProperty}}
+{% endif -%}
+  {%- if item.Label %}
+    Label: {{item.Label}}
+{% endif -%}
+  {%- if item.NoEcho %}
+    NoEcho: {{item.NoEcho}}
+{% endif -%}
+{%- if item.AssocaitionPropertyMetadata %}
+    AssociationPropertyMetadata: {{item.AssociationPropertyMetadata}}
+{% endif -%}
+{%- if item.Default %}
+    Default: {{item.Default}}
+{% endif -%}
+{%- if item.MinValue %}
+    MinValue: {{item.MinValue}}
+{% endif -%}
+{%- if item.MaxValue %}
+    MaxValue: {{item.MaxValue}}
+{% endif -%}
+    {%- if item.AllowedValues %}
+    AllowedValues:
+      {%- for value in item.AllowedValues %}
+      - {{ value }}
+      {%- endfor %}
+    {%- endif %}
+{% endfor %}
 Conditions:
   CreateAck:
     Fn::Equals:
@@ -444,41 +466,37 @@ Resources:
               - ManagedKubernetesCluster
               - ClusterId
           - Ref: ClusterId
-      HelmChartUrl: '{{ computenest::helmchart::chartUrl }}'
-      DockerConfigJson: '{{ computenest::helm::dockerconfigjson }}'
-      ChartValues: 
-        service: 
-          type: LoadBalancer
-        postgresql: 
-          enabled: True
-          adminPassword: 
-            Ref: AdminPassword
-          primary: 
-            persistence: 
-              enabled: True
-              storageClass: alicloud-disk-essd
-              size: 40Gi
+      {% raw -%}
+      HelmChartUrl: '{{computenest::helmchart::chartUrl}}'
+      DockerConfigJson: '{{computenest::helm::dockerconfigjson}}'
+      {%- endraw %}
+      ChartValues:
+        {{ Values | indent(width=8) }}
       Namespace:
         Ref: ALIYUN::StackName
-      ReleaseName: harbor
+      ReleaseName: {{ ReleaseName }}
       WaitUntil:
-        - Kind: Service
-          Name: harbor-server
-          JsonPath: $.status.loadBalancer.ingress[0].ip
+{%- for item in Outputs %}
+        - Kind: {{ item.Kind }}
+          Name: {{ item.Name }}
+          JsonPath: {{ item.JsonPath }}
           Operator: NotEmpty
           FirstMatch: true
           Timeout: 300
+{% endfor -%}
 Outputs:
-  Endpoint:
+{%- for item in Outputs %}
+  {{ item.DisplayName }}:
     Value:
       Fn::Sub:
-        - https://${OutputValue}:8080
+        - {{ item.Expression }}
         - OutputValue:
             Fn::Select:
-              - 0
+              - {{ loop.index0 }}
               - Fn::GetAtt:
                 - ComputenestHelmApplication
                 - WaitUntilData
+{% endfor -%}
 Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:
@@ -514,10 +532,12 @@ Metadata:
         Label:
           en: Basic Configuration
           zh-cn: 基础配置
-      
+      {% if Parameters | length > 0 %}
       - Parameters:
-         - AdminPassword
+        {%- for parameter in Parameters %}
+         - {{ parameter.Name }}
+        {% endfor -%}
         Label:
           en: Software Configuration
           zh-cn: 软件配置
-      
+      {% endif %}
